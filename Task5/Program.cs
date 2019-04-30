@@ -32,7 +32,15 @@ namespace Task5_Scheduler
                 Console.WriteLine("1 - High");
                 Console.WriteLine("2 - Medium");
                 Console.WriteLine("3 - Low");
-                input = Convert.ToChar(Console.ReadLine());
+                try
+                {
+                    input = Convert.ToChar(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Try to follow instructions nex time");
+                    return;
+                }
                 if (input == '1')
                 {
                     priority = Priority.High;
@@ -65,7 +73,15 @@ namespace Task5_Scheduler
                 Console.WriteLine("Create another task?");
                 Console.WriteLine("1 - Yes");
                 Console.WriteLine("2 - No");
-                input = Convert.ToChar(Console.ReadLine());
+                try
+                {
+                    input = Convert.ToChar(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Try to follow instructions nex time");
+                    return;
+                }
                 if (input == '1')
                 {
                     number++;
@@ -98,8 +114,8 @@ namespace Task5_Scheduler
 
             Console.WriteLine($"Total time needed = {sum} hours");
 
-                        
-            
+
+
             Console.WriteLine("Select task priority:");
             Console.WriteLine("1 - High");
             Console.WriteLine("2 - Medium");
@@ -133,11 +149,78 @@ namespace Task5_Scheduler
             }
             Console.WriteLine($"Number of tasks with {priority} priority = {sum}");
 
+            Console.WriteLine("Please enter a number of days");
+            string daysNumber = Console.ReadLine();
+            int daysNumberInt;
+            try
+            {
+                daysNumberInt = int.Parse(daysNumber);
+            }
+            catch
+            {
+                Console.WriteLine("Value should be integer");
+                return;
+            }
+            int hoursQuantity = daysNumberInt * 24;
+            List<int> taskList = new List<int>();
+            int taskPosition = 1;
+
+
+            for (int i = 0; i < number; i++)
+            {
+                if (hoursQuantity > 0)
+                {
+                    if ((table.Rows[i].Field<string>(0) == "High"))
+                    {
+                        taskList.Add(i + 1);
+                        hoursQuantity = hoursQuantity - (table.Rows[i].Field<int>(1));
+                        taskPosition++;
+                    }
+                }
+            }
+            for (int i = 0; i < number; i++)
+            {
+                if (hoursQuantity > 0)
+                {
+                    if ((table.Rows[i].Field<string>(0) == "Medium"))
+                    {
+                        taskList.Add(i + 1);
+                        hoursQuantity = hoursQuantity - (table.Rows[i].Field<int>(1));
+                        taskPosition++;
+                    }
+                }
+
+            }
+            for (int i = 0; i < number; i++)
+            {
+                if (hoursQuantity > 0)
+                {
+                    if ((table.Rows[i].Field<string>(0) == "Low"))
+                    {
+                        taskList.Add(i + 1);
+                        hoursQuantity = hoursQuantity - (table.Rows[i].Field<int>(1));
+                        taskPosition++;
+                    }
+                }
+
+            }
+            if (hoursQuantity < 0)
+            {
+                taskList.Remove(taskPosition - 1);
+            }
+            Console.WriteLine("You are able to complete next tasks");
+            foreach (int position in taskList)
+            {
+                Console.Write($"{position}  ");
+            }
+            
+
 
 
 
         }
-
+    }
+}
         enum Priority
         {
             Error,
@@ -155,5 +238,5 @@ namespace Task5_Scheduler
         }
 
         
-    }
-}
+    
+
