@@ -22,7 +22,7 @@ namespace Task5_Scheduler
             int sum = 0;
             int value = 1;
             int number = 1;
-            char input;
+            int input;
             while (value != 0)
             {
                 priority = Priority.Error;
@@ -32,69 +32,53 @@ namespace Task5_Scheduler
                 Console.WriteLine("1 - High");
                 Console.WriteLine("2 - Medium");
                 Console.WriteLine("3 - Low");
-                try
-                {
-                    input = Convert.ToChar(Console.ReadLine());
-                }
-                catch
-                {
-                    Console.WriteLine("Try to follow instructions nex time");
-                    return;
-                }
-                if (input == '1')
+			
+				input = GetOneOfPossibleNumbers(3);
+
+                if (input == 1)
                 {
                     priority = Priority.High;
                 }
-                else if (input == '2')
+                else if (input == 2)
                 {
                     priority = Priority.Medium;
                 }
-                else if (input == '3')
+                else 
                 {
-                    priority = Priority.Medium;
+                    priority = Priority.Low;
                 }
+
                 Console.WriteLine("Select task complexity:");
                 Console.WriteLine("1 - Complex");
                 Console.WriteLine("2 - Average");
                 Console.WriteLine("3 - Easy");
-                input = Convert.ToChar(Console.ReadLine());
-                if (input == '1')
+                input = GetOneOfPossibleNumbers(3);
+				if (input == 1)
                 {
                     complexity = Complexity.Complex;
                 }
-                else if (input == '2')
+                else if (input == 2)
                 {
                     complexity = Complexity.Average;
                 }
-                else if (input == '3')
+                else
                 {
-                    complexity = Complexity.Complex;
+                    complexity = Complexity.Easy;
                 }
                 Console.WriteLine("Create another task?");
                 Console.WriteLine("1 - Yes");
                 Console.WriteLine("2 - No");
-                try
-                {
-                    input = Convert.ToChar(Console.ReadLine());
-                }
-                catch
-                {
-                    Console.WriteLine("Try to follow instructions nex time");
-                    return;
-                }
-                if (input == '1')
+				
+				input = GetOneOfPossibleNumbers(2);
+                if (input == 1)
                 {
                     number++;
                 }
-                else if (input == '2')
+                else 
                 {
                     value = 0;
                 }
-                else
-                {
-                    Console.WriteLine("Try to follow instructions nex time");
-                    return;
-                }
+              
                 if (priority == Priority.Error || complexity == Complexity.Error)
                 {
                     Console.WriteLine("Try to follow instructions nex time");
@@ -120,48 +104,37 @@ namespace Task5_Scheduler
             Console.WriteLine("1 - High");
             Console.WriteLine("2 - Medium");
             Console.WriteLine("3 - Low");
-            input = Convert.ToChar(Console.ReadLine());
-            if (input == '1')
+            input = GetOneOfPossibleNumbers(3);
+            if (input == 1)
             {
                 priority = Priority.High;
             }
-            else if (input == '2')
+            else if (input == 2)
             {
                 priority = Priority.Medium;
             }
-            else if (input == '3')
+            else 
             {
-                priority = Priority.Medium;
+                priority = Priority.Low;
             }
-            else
-            {
-                Console.WriteLine("Try to follow instructions nex time");
-                return;
-            }
+            
             sum = 0;
-            string s = priority.ToString();
+            
             for (int i = 0; i < number; i++)
             {
-                if (s == table.Rows[i].Field<string>(0))
+                if (priority.ToString() == table.Rows[i].Field<string>(0))
                 {
                     sum++;
                 }
             }
             Console.WriteLine($"Number of tasks with {priority} priority = {sum}");
 
-            Console.WriteLine("Please enter a number of days");
-            string daysNumber = Console.ReadLine();
-            int daysNumberInt;
-            try
-            {
-                daysNumberInt = int.Parse(daysNumber);
-            }
-            catch
-            {
-                Console.WriteLine("Value should be integer");
-                return;
-            }
-            int hoursQuantity = daysNumberInt * 24;
+		
+			Console.WriteLine("Please enter a number of days");
+
+			int daysNumber = GetPositiveIntegerValueFromConsole();
+            
+            int hoursQuantity = daysNumber * 24;
             List<int> taskList = new List<int>();
             int taskPosition = 1;
 
@@ -213,13 +186,59 @@ namespace Task5_Scheduler
             {
                 Console.Write($"{position}  ");
             }
-            
+            Console.ReadKey();
 
 
 
 
         }
-    }
+
+		private static int GetOneOfPossibleNumbers(int quantity)
+		{
+			int enteredValue;
+			while (true)
+			{
+				if (int.TryParse(Console.ReadLine(), out enteredValue) && enteredValue > 0)
+				{
+					if (enteredValue <= quantity)
+					{
+						goto ReturnResult;
+					}
+					else
+					{
+						Console.WriteLine($"Value should be less or equal {quantity}");
+					}
+
+				}
+				
+				else
+				{
+					Console.WriteLine("Value should be positive integer");
+				}
+
+			}
+			ReturnResult:
+			return enteredValue;
+		}
+
+		private static int GetPositiveIntegerValueFromConsole()
+		{
+			int intValue;
+		while(true)
+		{
+		if (int.TryParse(Console.ReadLine(), out intValue) && intValue > 0)
+		{
+					break;
+		}
+		else
+		{
+					Console.WriteLine("Value should be integer positive");
+		}
+		}
+			return intValue;
+		}
+	}
+	
 }
         enum Priority
         {
